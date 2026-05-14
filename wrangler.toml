@@ -1,0 +1,11 @@
+name = "linmap-tiles"
+main = "src/index.ts"
+compatibility_date = "2024-11-02"
+# compatibility_flags = [ "nodejs_compat" ]
+
+# [vars]
+# MY_VAR = "my-variable"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "linmap-tiles"
