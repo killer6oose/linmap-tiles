@@ -13,6 +13,14 @@ app.get('/', (c) => {
   return c.text('Tile server for map.lamangintel.net')
 })
 
+app.options('/:v/:z/:x/:y', (c) => {
+  return c.text('', 204, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Max-Age': '86400',
+  });
+});
+
 app.get('/:v/:z/:x/:y', async (c) => {
   const { BUCKET } = c.env;
   const { v, z, x, y } = c.req.param();
@@ -22,7 +30,7 @@ app.get('/:v/:z/:x/:y', async (c) => {
   }
 
   try {
-    const tilePath = `${v}/${z}/${x}/${y}.jpg`;
+    const tilePath = `linmap-tiles/${v}/${z}/${x}/${y}.jpg`;
 
     const tile = await BUCKET.get(tilePath);
 
@@ -36,7 +44,8 @@ app.get('/:v/:z/:x/:y', async (c) => {
 
     return c.body(tile.body, 200, {
       'Content-Type': 'image/jpeg',
-      'Cache-Control': 'public, max-age=31536000'
+      'Cache-Control': 'public, max-age=31536000',
+      'Access-Control-Allow-Origin': '*',
     });
   } catch (error) {
     console.error('Error fetching tile. Contact info@map.lamangintel.net');
